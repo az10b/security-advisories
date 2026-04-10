@@ -83,6 +83,12 @@ Complete the initial setup and create a regular user account.
 
 ### Step 2: Login and obtain session cookies
 
+Login as an Admin and click add a new user on the bottom. Create your test account and click on pending to verify the user.
+
+<img width="1420" height="804" alt="image" src="https://github.com/user-attachments/assets/cf1a0f98-dbc2-4d3d-804c-7594b5064256" />
+
+We will be using the test account to demonstrate the POC.
+
 ```bash
 # Get CSRF token and session cookie
 curl -s -c /tmp/ls_cookies.txt http://localhost:3063/login > /tmp/ls_login.html
@@ -93,8 +99,8 @@ curl -s -b /tmp/ls_cookies.txt -c /tmp/ls_cookies.txt \
   -X POST http://localhost:3063/login \
   -H "Content-Type: application/x-www-form-urlencoded" \
   --data-urlencode "_token=${TOKEN}" \
-  --data-urlencode "email=attacker@example.com" \
-  --data-urlencode "password=attacker_password" \
+  --data-urlencode "email=test2@test" \
+  --data-urlencode "password=test" \
   -o /dev/null --max-redirs 0
 ```
 
@@ -132,11 +138,20 @@ The `onmouseover` attribute is intact. The `rel` attribute was appended by the s
 
 The attacker must have at least one link for the info page to render. After creating a link, visit:
 
+You can get the link id by clicking edit its in the url
+
+<img width="944" height="814" alt="image" src="https://github.com/user-attachments/assets/fbdbb296-b3a8-486a-83d8-229aebde804d" />
+
+
 ```
 http://localhost:3063/info/{link_id}
 ```
 
 Hover over "Hover over me" — a JavaScript alert displays the viewer's session cookies.
+
+
+<img width="1380" height="656" alt="image" src="https://github.com/user-attachments/assets/3663d837-1540-47fd-9cc2-d88c686621b9" />
+
 
 ### Verified payload in database vs. rendered output
 
