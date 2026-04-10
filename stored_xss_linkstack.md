@@ -136,12 +136,13 @@ The `onmouseover` attribute is intact. The `rel` attribute was appended by the s
 
 ### Step 5: Trigger the XSS
 
-The attacker must have at least one link for the info page to render. After creating a link, visit:
+The attacker must have at least one link for the info page to render.
 
 You can get the link id by clicking edit its in the url
 
 <img width="944" height="814" alt="image" src="https://github.com/user-attachments/assets/fbdbb296-b3a8-486a-83d8-229aebde804d" />
 
+After creating a link, visit:
 
 ```
 http://localhost:3063/info/{link_id}
