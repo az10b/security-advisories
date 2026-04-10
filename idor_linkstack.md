@@ -225,6 +225,10 @@ Link::where("id", $linkId)
     ->update(['order' => $newOrder]);
 ```
 
+Fix PR: https://github.com/LinkStackOrg/LinkStack/pull/975
+
+```
+
 ## Timeline
 
 | Date | Event |
