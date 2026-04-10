@@ -173,31 +173,18 @@ Hover over "Hover over me" — a JavaScript alert displays the viewer's session 
 
 ## Recommended Fix
 
-1. **Replace `{!! !!}` with `{{ }}`** for user-controlled data in all Blade templates, or use a proper HTML sanitization library such as [HTML Purifier](http://htmlpurifier.org/) that strips event handler attributes from allowed tags:
+**Strip all `on*` event handler attributes** from the description after `strip_tags()` using word boundary matching. This catches event handlers regardless of whether there is whitespace before the attribute name (e.g., `"onmouseover` with no space):
 
 ```php
-use HTMLPurifier;
-use HTMLPurifier_Config;
-
-$config = HTMLPurifier_Config::createDefault();
-$config->set('HTML.Allowed', 'a[href],p,strong,i,ul,ol,li,blockquote,h2,h3,h4');
-$purifier = new HTMLPurifier($config);
-$pageDescription = $purifier->purify($request->pageDescription);
+// In app/Http/Controllers/UserController.php, after strip_tags():
+$pageDescription = strip_tags($request->pageDescription, '<a><p><strong><i><ul><ol><li><blockquote><h2><h3><h4>');
+$pageDescription = preg_replace('/\bon\w+\s*=\s*(["\']).*?\1/i', '', $pageDescription); // quoted values
+$pageDescription = preg_replace('/\bon\w+\s*=\s*[^\s>]*/i', '', $pageDescription);      // unquoted values
+$pageDescription = preg_replace("/<a([^>]*)>/i", "<a $1 rel=\"noopener noreferrer nofollow\">", $pageDescription);
+$pageDescription = strip_tags_except_allowed_protocols($pageDescription);
 ```
 
-2. **Use Blade's escaped output** on the info page:
-
-```blade
-<!-- Before (vulnerable) -->
-<p class="card-text mt-2">{!!$userData->littlelink_description!!}</p>
-
-<!-- After (safe) -->
-<p class="card-text mt-2">{{ $userData->littlelink_description }}</p>
-```
-
-3. **Add sanitization to the admin edit-user endpoint** at `AdminController.php:337` — apply the same sanitization as the user-facing endpoint.
-
-4. **Implement a Content-Security-Policy header** as defense-in-depth to mitigate XSS exploitation even if sanitization is bypassed.
+Fix PR: https://github.com/LinkStackOrg/LinkStack/pull/974
 
 ## Timeline
 
