@@ -131,7 +131,7 @@ Link IDs are visible in public page source code, making enumeration trivial.
 ### Prerequisites
 
 - A LinkStack instance with two user accounts (attacker and victim)
-- The victim has at least one link (in this example, link ID `153589040`)
+- The victim has at least one link (in this example, link ID `946500709`)
 
 ### Step 1: Login as attacker and obtain session
 
