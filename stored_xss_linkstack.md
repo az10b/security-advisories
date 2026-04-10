@@ -198,4 +198,3 @@ Fix PR: https://github.com/LinkStackOrg/LinkStack/pull/974
 - https://github.com/LinkStackOrg/LinkStack
 - CWE-79: https://cwe.mitre.org/data/definitions/79.html
 - PHP strip_tags limitations: https://www.php.net/manual/en/function.strip-tags.php
-- OWASP XSS Prevention Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Scripting_Prevention_Cheat_Sheet.html
