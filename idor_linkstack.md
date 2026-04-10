@@ -141,9 +141,9 @@ Visit /admin/users to create another user. Click on Add a new user on the bottom
 
 <img width="1456" height="847" alt="image" src="https://github.com/user-attachments/assets/98fe1036-4801-4406-9c38-2a6162bbe008" />
 
-After creating the user, click on pending to verify the user and login.
+After creating the user, click on pending to verify the user.
 
-Create a link on the admin account and grab the id by clicking on edit, it will be in the url.
+Create a link on the admin account and grab the links id by clicking on edit, it will be in the url.
 
 <img width="1035" height="835" alt="image" src="https://github.com/user-attachments/assets/10ebadd4-22d6-4d56-a5a4-5a53fe15d0cd" />
 
@@ -155,6 +155,8 @@ Create a link on the admin account and grab the id by clicking on edit, it will 
 
 
 ### Step 2: Overwrite victim's link
+
+Login as the non-admin user.
 
 Open the browser developer console (F12) while logged in as the attacker and execute:
 
