@@ -171,13 +171,6 @@ Hover over "Hover over me" — a JavaScript alert displays the viewer's session 
 - The victim must visit the attacker's link info page and interact with the link (hover, focus, or click depending on payload)
 - No special server configuration is required — the vulnerability exists in the default installation
 
-## Additional Attack Surfaces
-
-The same vulnerability class exists in other rendering paths:
-
-1. **`resources/views/linkstack/elements/bio.blade.php:3`** — renders `littlelink_description` unescaped when `ALLOW_USER_HTML=true`
-2. **`app/Http/Controllers/AdminController.php:337-353`** — the admin user-edit endpoint saves `littlelink_description` with **zero sanitization**, allowing `<script>` tags directly
-
 ## Recommended Fix
 
 1. **Replace `{!! !!}` with `{{ }}`** for user-controlled data in all Blade templates, or use a proper HTML sanitization library such as [HTML Purifier](http://htmlpurifier.org/) that strips event handler attributes from allowed tags:
