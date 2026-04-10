@@ -203,8 +203,6 @@ Route::post('/studio/sort-link', [UserController::class, 'sortLinks'])->name('so
 Route::get('/clearIcon/{id}', [UserController::class, 'clearIcon'])->name('clearIcon');
 
 // After (fixed)
-Route::post('/studio/edit-link', [UserController::class, 'saveLink'])->name('addLink')->middleware('link-id');
-Route::post('/studio/sort-link', [UserController::class, 'sortLinks'])->name('sortLinks')->middleware('link-id');
 Route::get('/clearIcon/{id}', [UserController::class, 'clearIcon'])->name('clearIcon')->middleware('link-id');
 ```
 
