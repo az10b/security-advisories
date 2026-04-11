@@ -212,14 +212,15 @@ Make sure to add the right ID.
 
 ## Recommended Fix
 
-Move the `_method` override to execute **before** the CSRF check, or validate the CSRF token for the overridden method rather than the original. The simplest fix is to perform the method override in `main.inc.php` before any CSRF validation runs:
+Change the method override in `include/class.dispatcher.php` to only accept `_method` from the POST body (`$_POST`) instead of the query string (`$_GET`). The application's pjax frontend already sends `_method` as a hidden POST form field, so this change preserves existing functionality while closing the GET-based bypass — POST requests are already validated by the CSRF token check that runs before the dispatcher.
 
-```php
-// In main.inc.php — before CSRF checks in staff.inc.php / client.inc.php
-if (isset($_GET['_method'])) {
-    $_SERVER['REQUEST_METHOD'] = strtoupper($_GET['_method']);
-    unset($_GET['_method']);
+```diff
+
+if (isset($_POST['_method'])) {
+    $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);
+    unset($_POST['_method']);
 }
+
 ```
 
 Then remove the same block from `include/class.dispatcher.php`.
