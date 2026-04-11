@@ -56,6 +56,89 @@ An unauthenticated attacker who submits a ticket containing a hidden `<img>` tag
 
 The attacker requires no authentication — osTicket allows guest ticket submission by default. The payload fires automatically with zero clicks when the agent opens the ticket to read it.
 
+## Environment Setup
+
+### Dockerfile
+
+```dockerfile
+FROM php:8.3-apache
+RUN apt-get update && apt-get install -y \
+    libpng-dev libjpeg-dev libfreetype6-dev libzip-dev \
+    libonig-dev libxml2-dev libicu-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd mysqli mbstring xml dom intl zip opcache ctype \
+    && pecl install apcu && docker-php-ext-enable apcu \
+    && a2enmod rewrite \
+    && echo 'ServerName localhost' >> /etc/apache2/apache2.conf
+```
+
+### docker-compose.yml
+
+```yaml
+services:
+  osticket:
+    build: .
+    ports:
+      - "9090:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: osticket
+      MYSQL_USER: osticket
+      MYSQL_PASSWORD: osticket
+    ports:
+      - "3307:3306"
+    volumes:
+      - osticket_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  osticket_db:
+```
+
+### Installation Steps
+
+1. Clone osTicket v1.18.3:
+   ```
+   git clone --branch v1.18.3 --depth 1 https://github.com/osTicket/osTicket.git osticket
+   cd osticket
+   ```
+
+2. Place the `Dockerfile` and `docker-compose.yml` above in the repo root.
+
+3. Create the config file:
+   ```
+   cp include/ost-sampleconfig.php include/ost-config.php
+   chmod 0666 include/ost-config.php
+   ```
+
+4. Start the containers:
+   ```
+   docker compose up -d --build
+   ```
+
+5. Open `http://localhost:9090/setup/install.php` and complete installation with:
+   - MySQL Hostname: `db`
+   - MySQL Database: `osticket`
+   - MySQL Username: `osticket`
+   - MySQL Password: `osticket`
+   - Set any admin username/password
+
+6. After installation, lock down the config:
+   ```
+   chmod 0644 include/ost-config.php
+   ```
+
 ## Proof of Concept
 
 ### Prerequisites
