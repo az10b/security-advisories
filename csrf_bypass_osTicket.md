@@ -73,24 +73,39 @@ The attacker requires no authentication — osTicket allows guest ticket submiss
 
 2. Log into the staff panel and create a QuickNote on any user's profile (e.g., navigate to Users > click a user > add a note such as "Customer approved for refund").
 
-3. Note the QuickNote ID (IDs are sequential starting at 1).
+<img width="799" height="675" alt="image" src="https://github.com/user-attachments/assets/70a4a776-8ac0-4fb3-b2e9-e2d58bf3adf1" />
 
-4. As an unauthenticated user, open a new ticket at `/open.php`.
+4. Note the QuickNote ID (IDs are sequential starting at 1).
 
-5. In the ticket message body, switch to HTML/source mode and enter:
-   ```html
-   <p>Hi, I need help with my account please.</p>
-   <img src="http://TARGET/scp/ajax.php/note/1?_method=DELETE"
-        style="width:1px;height:1px;" />
+5. As an unauthenticated user, open a new ticket at `/open.php`.
+
+6. In the ticket message body, switch to HTML/source mode and enter:
+
+```html
+<p>Hi, I need help with my account please.</p>
+<img src="http://TARGET/scp/ajax.php/note/3?_method=DELETE"/>
    ```
+<img width="994" height="607" alt="image" src="https://github.com/user-attachments/assets/3fc7b79a-52f0-4708-8eb1-7faa1d1f3809" />
 
-6. Submit the ticket.
+Make sure the image tag is generated.
 
-7. Log into the staff panel and open the newly submitted ticket.
+<img width="789" height="670" alt="image" src="https://github.com/user-attachments/assets/f474d7d3-6b1d-4f18-9dbe-4f10bb1a7985" />
 
-8. Observe that QuickNote ID 1 has been deleted from the user's profile. The staff agent's browser loaded the `<img>` src as a GET request, the CSRF check was skipped (not a POST), the dispatcher overrode the method to DELETE, and the `deleteNote` handler executed with the agent's authenticated session.
+7. Submit the ticket.
+
+8. Log into the staff panel and open the newly submitted ticket.
+
+<img width="841" height="673" alt="image" src="https://github.com/user-attachments/assets/9110ae0e-9e7e-429a-96c0-ec8fe1462efa" />
+
+
+10. Observe that QuickNote ID 3 has been deleted from the user's profile. The staff agent's browser loaded the `<img>` src as a GET request, the CSRF check was skipped (not a POST), the dispatcher overrode the method to DELETE, and the `deleteNote` handler executed with the agent's authenticated session.
+
+<img width="917" height="586" alt="image" src="https://github.com/user-attachments/assets/d6d2cfa4-17ea-40cb-80c7-4b6b092b84fe" />
+
 
 ### Alternate PoC — External page targeting multiple resources
+
+Make sure to add the right ID.
 
 ```html
 <!DOCTYPE html>
